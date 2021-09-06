@@ -1,0 +1,18 @@
+#Monitoring the CPU threshold on a server and send it via the internal SMTP server
+
+$proc = get-counter -Counter "\Processor(_Total)\% Processor Time" -SampleInterval 60
+ 
+$cpu=($proc.readings -split ":")[-1]
+$cpu
+
+
+$Integer = $cpu -as [int]  #Convert String to Integer 
+
+
+If($Integer -ge 5){  
+  
+ Send-MailMessage -Body "Total CPU Utilization Percentage is too high $Integer%" –From scom@contoso.com –SmtpServer smtp.ae.contoso.com -Subject "High CPU Usage on UK06UDCFS01VS" –To anton@contoso.com
+  
+}
+
+
